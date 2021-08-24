@@ -74,11 +74,7 @@
                     $position = $_POST['txtposition'];
                     $id = $_POST['txtid'];
                     $id1 =$_POST['id1'];
-                    //Kiểm tra: Dữ liệu người dùng nhập có đang BỎ TRỐNG trường nào KO?
-                    //CSDL của chúng ta đã lưu Mật khẩu ở dạng THÔ
-                    //Kiểm tra: Trước khi thêm Tài khoản, phải kiểm tra username và email này có tồn tại chưa?
-                    //Nếu chưa tồn tại thì mới thêm;
-                    //Bước 02: Thực hiện truy vấn 
+                   
                     $sql ="INSERT INTO personal_directory (ID,full_name, email, phone, position,id_agency, address  )  VALUES ( '$id1','$name', '$email','$phone', '$position', '$id','$address');";
               
                     
