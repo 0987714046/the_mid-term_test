@@ -6,6 +6,8 @@
     {
         header('location:'.SITEURL.'/admin/login.php');  
     }
+    $_SESSION['product_filter'] =$_POST;
+    
     include("header.php");
 ?>
 
@@ -25,9 +27,44 @@
                 <div class="text-center">
                     <h2>Quản lý Cơ Quan , Tổ Chức</h2>
                 </div>
+
                 <div>
                     <button type="button"  style="background-color: #00a651;border-radius: 7px;"><a href="add_agency.php"><i class="fa fa-plus"></i> Add agency </a> </button>
 
+                </div>
+                <div class="product-search">
+                    <form id="product-search-form" action=" admin.php?action=search" method="POST">
+                        <fieldset>
+                            <legend>Tìm kiếm cơ quan ,tổ chức</legend>
+                            ID: <input type="text" name="id" value="<?=!empty($id)?$id:""?>"/>
+                            Tên cơ quan: <input type="text" name="name"value="<?=!empty($name)?$name:""?>"/>
+                            <input type="submit" value="tìm">
+                        </fieldset>
+                    </form>
+<?php
+if(!empty($_SESSION['product_filter'])){
+    $where ="";
+    foreach($_SESSION['product_filter'] as $field => $value){
+    if(!empty($value)){
+        switch($field){
+            case "name":
+                $where.= (!empty($where))? "AND"."'".$field."' LIKE '%".$value."%'":"'".$field."' LIKE'%". $value."%'";
+                break;
+                default:
+                $where.= (!empty($where))? "AND"."'".$field."'= ".$value."":"'".$field."'=". $value."";
+                break;
+
+        }
+    }
+}
+extract(($_SESSION['product_filter']));
+}
+if(!empty($where)){
+    $product =mysqli_query($conn, "SELECT * FROM 'agency_directory' WHERE (".$where.") ORDER BY 'id' DESC LIMIT");
+}else{
+    $product =mysqli_query($conn, "SELECT * FROM 'agency_directory' ORDER BY 'id' DESC LIMIT" );
+}
+?>
                 </div>
                 <table class="table">
                     <thead>
@@ -112,7 +149,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="nav-collapse collapse" id="collapseExample2">
+            <div class="nav-collapse collapse show" id="collapseExample2">
                 <div class="text-center">
                     <h2>Quản lý cá nhân</h2>
                 </div>
@@ -187,7 +224,7 @@
                                          <td>
                                 <div class="d-flex">
                                     
-                                    <button class="btl_account" type="button"><a href="delete_personal"> Delete agency </a></button>
+                                    <button class="btl_account" type="button"><a href="delete_personal.php"> Delete agency </a></button>
                                     <button class="btl_account" type="button">Change agency</button>
                                 </div>
                             </td>
